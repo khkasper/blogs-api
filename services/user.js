@@ -1,8 +1,9 @@
 const generateToken = require('../utils/generateToken');
 const { User } = require('../models');
-const { BAD_REQUEST, CONFLICT } = require('../utils/statusCodes');
+const { BAD_REQUEST, CONFLICT, NOT_FOUND } = require('../utils/statusCodes');
 
 const ERROR_400 = { code: BAD_REQUEST, message: 'Invalid fields' };
+const ERROR_404 = { code: NOT_FOUND, message: 'User does not exist' };
 const ERROR_409 = { code: CONFLICT, message: 'User already registered' };
 
 const createUser = async (userData) => {
@@ -31,8 +32,17 @@ const getAllUsers = async () => {
   return users;
 };
 
+const getUserById = async (id) => {
+  const user = await User.findOne({ where: { id } });
+
+  if (!user) throw ERROR_404;
+
+  return user;
+};
+
 module.exports = {
   createUser,
   userLogin,
   getAllUsers,
+  getUserById,
 };
