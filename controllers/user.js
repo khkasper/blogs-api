@@ -14,7 +14,13 @@ const userLogin = rescue(async (req, res) => {
   return res.status(OK).json({ token });
 });
 
+const getAllUsers = rescue(async (_req, res) => {
+  const users = await UserService.getAllUsers();
+  return res.status(OK).json(users);
+});
+
 module.exports = {
   createUser,
   userLogin,
+  getAllUsers,
 };

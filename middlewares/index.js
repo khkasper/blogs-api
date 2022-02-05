@@ -1,9 +1,9 @@
-const errorMiddleware = require('./errorMiddleware');
 const authValidation = require('./authValidation');
+const errorMiddleware = require('./errorMiddleware');
 const validate = require('./validate');
 
 module.exports = {
-  errorMiddleware,
   authValidation,
+  errorMiddleware,
   validate,
 };
