@@ -5,6 +5,7 @@ const { errorMiddleware } = require('./middlewares');
 const {
   userRoute,
   loginRoute,
+  categoryRoute,
 } = require('./routes');
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 
 app.use('/user', userRoute);
 app.use('/login', loginRoute);
+app.use('/categories', categoryRoute);
 
 app.use('/', errorMiddleware);
 
