@@ -9,5 +9,5 @@ module.exports = (err, _req, res, _next) => {
     return res.status(err.code).json({ message: err.message });
   }
 
-  return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal server error' });
+  return res.status(INTERNAL_SERVER_ERROR).json({ message: err.message });
 };

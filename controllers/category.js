@@ -2,18 +2,18 @@ const rescue = require('express-rescue');
 const CategoryService = require('../services/category');
 const { CREATED, OK } = require('../utils/statusCodes');
 
-const createCategory = rescue(async (req, res) => {
+const create = rescue(async (req, res) => {
   const { name } = req.body;
-  const category = await CategoryService.createCategory({ name });
+  const category = await CategoryService.create({ name });
   return res.status(CREATED).json(category);
 });
 
-const getAllCategories = rescue(async (req, res) => {
-  const categories = await CategoryService.getAllCategories();
+const getAll = rescue(async (req, res) => {
+  const categories = await CategoryService.getAll();
   return res.status(OK).json(categories);
 });
 
 module.exports = {
-  createCategory,
-  getAllCategories,
+  create,
+  getAll,
 };

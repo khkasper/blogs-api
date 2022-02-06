@@ -7,8 +7,8 @@ const UserController = require('../controllers/user');
 const router = express.Router();
 
 router
-  .get('/', authValidation, UserController.getAllUsers)
-  .get('/:id', authValidation, UserController.getUserById)
-  .post('/', validate(user), UserController.createUser);
+  .get('/', authValidation, UserController.getAll)
+  .get('/:id', authValidation, UserController.getById)
+  .post('/', validate(user), UserController.create);
 
 module.exports = router;
