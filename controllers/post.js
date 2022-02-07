@@ -14,7 +14,14 @@ const getAll = rescue(async (_req, res) => {
   return res.status(OK).json(posts);
 });
 
+const getById = rescue(async (req, res) => {
+  const { id } = req.params;
+  const post = await PostService.getById(id);
+  return res.status(OK).json(post);
+});
+
 module.exports = {
   create,
   getAll,
+  getById,
 };
