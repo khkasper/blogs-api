@@ -49,15 +49,27 @@ const update = async ({ title, content, categoryIds }, email, id) => {
   if (userId !== postUserId) throw ERROR_401;
 
   await BlogPost.update({ title, content }, { where: { id } });
-
   const post = await BlogPost.findOne({
     where: { id },
     include: [
       { model: Category, as: 'categories', through: { attributes: [] } },
     ],
   });
-
   return post;
+};
+
+const remove = async (email, id) => {
+  const post = await BlogPost.findOne({ where: { id } });
+
+  if (!post) throw ERROR_404;
+
+  const { dataValues: { id: userId } } = await User.findOne({ where: { email } });
+  const { userId: postUserId } = await BlogPost.findOne({ where: { id } });
+
+  if (userId !== postUserId) throw ERROR_401;
+
+  const removed = await BlogPost.destroy({ where: { id } });
+  return removed;
 };
 
 module.exports = {
@@ -65,4 +77,5 @@ module.exports = {
   getAll,
   getById,
   update,
+  remove,
 };

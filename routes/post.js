@@ -10,6 +10,7 @@ router
   .get('/', authValidation, PostController.getAll)
   .get('/:id', authValidation, PostController.getById)
   .post('/', authValidation, validate(create), PostController.create)
-  .put('/:id', authValidation, validate(update), PostController.update);
+  .put('/:id', authValidation, validate(update), PostController.update)
+  .delete('/:id', authValidation, PostController.remove);
 
 module.exports = router;
