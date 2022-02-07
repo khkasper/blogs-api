@@ -8,7 +8,7 @@ const create = rescue(async (req, res) => {
   return res.status(CREATED).json(category);
 });
 
-const getAll = rescue(async (req, res) => {
+const getAll = rescue(async (_req, res) => {
   const categories = await CategoryService.getAll();
   return res.status(OK).json(categories);
 });

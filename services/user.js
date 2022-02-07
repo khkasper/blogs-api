@@ -6,13 +6,13 @@ const ERROR_404 = { code: NOT_FOUND, message: 'User does not exist' };
 const ERROR_409 = { code: CONFLICT, message: 'User already registered' };
 
 const create = async (userData) => {
-  const { id, email } = userData;
+  const { email } = userData;
   const existingUser = await User.findOne({ where: { email } });
 
   if (existingUser) throw ERROR_409;
 
   await User.create(userData);
-  const token = generateToken({ id, email });
+  const token = generateToken({ email });
   return token;
 };
 
