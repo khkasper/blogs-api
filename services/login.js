@@ -10,9 +10,7 @@ const login = async (userData) => {
 
   if (!existingUser) throw ERROR_400;
 
-  const { id: userId } = existingUser.dataValues;
-
-  const token = generateToken({ userId, email });
+  const token = generateToken({ email });
   return token;
 };
 
