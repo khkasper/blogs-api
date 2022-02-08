@@ -35,10 +35,17 @@ const remove = rescue(async (req, res) => {
   return res.status(NO_CONTENT).end();
 });
 
+const getByQuery = rescue(async (req, res) => {
+  const { q } = req.query;
+  const posts = await PostService.getByQuery(q);
+  return res.status(OK).json(posts);
+});
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
   remove,
+  getByQuery,
 };

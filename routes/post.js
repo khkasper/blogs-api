@@ -8,6 +8,7 @@ const router = express.Router();
 
 router
   .get('/', authValidation, PostController.getAll)
+  .get('/search', authValidation, PostController.getByQuery)
   .get('/:id', authValidation, PostController.getById)
   .post('/', authValidation, validate(create), PostController.create)
   .put('/:id', authValidation, validate(update), PostController.update)
