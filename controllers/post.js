@@ -31,8 +31,8 @@ const update = rescue(async (req, res) => {
 const remove = rescue(async (req, res) => {
   const { id } = req.params;
   const { userEmail: email } = req;
-  const post = await PostService.remove(email, id);
-  return res.status(NO_CONTENT).json(post);
+  await PostService.remove(email, id);
+  return res.status(NO_CONTENT).end();
 });
 
 module.exports = {

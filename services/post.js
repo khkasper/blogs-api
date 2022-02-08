@@ -1,15 +1,15 @@
 const { BlogPost, Category, User } = require('../models');
 const { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } = require('../utils/statusCodes');
 
-const ERROR_400_1 = { code: BAD_REQUEST, message: '"categoryIds" not found' };
-const ERROR_400_2 = { code: BAD_REQUEST, message: 'Categories cannot be edited' };
+const ERROR_400_FIND = { code: BAD_REQUEST, message: '"categoryIds" not found' };
+const ERROR_400_EDIT = { code: BAD_REQUEST, message: 'Categories cannot be edited' };
 const ERROR_401 = { code: UNAUTHORIZED, message: 'Unauthorized user' };
 const ERROR_404 = { code: NOT_FOUND, message: 'Post does not exist' };
 
 const create = async ({ title, content, categoryIds, email }) => {
   const categoryValidation = await Promise.all(categoryIds.map((id) => Category.findByPk(id)));
 
-  if (categoryValidation.includes(null)) throw ERROR_400_1;
+  if (categoryValidation.includes(null)) throw ERROR_400_FIND;
 
   const { id: userId } = await User.findOne({ where: { email } });
   const post = await BlogPost.create({ title, content, userId });
@@ -40,13 +40,21 @@ const getById = async (id) => {
   return post;
 };
 
-const update = async ({ title, content, categoryIds }, email, id) => {
-  if (categoryIds) throw ERROR_400_2;
-
+const checkUser = async (email, id) => {
   const { dataValues: { id: userId } } = await User.findOne({ where: { email } });
   const { userId: postUserId } = await BlogPost.findOne({ where: { id } });
 
-  if (userId !== postUserId) throw ERROR_401;
+  if (userId === postUserId) return true;
+
+  return false;
+};
+
+const update = async ({ title, content, categoryIds }, email, id) => {
+  if (categoryIds) throw ERROR_400_EDIT;
+
+  const validUser = await checkUser(email, id);
+
+  if (!validUser) throw ERROR_401;
 
   await BlogPost.update({ title, content }, { where: { id } });
   const post = await BlogPost.findOne({
@@ -63,10 +71,9 @@ const remove = async (email, id) => {
 
   if (!post) throw ERROR_404;
 
-  const { dataValues: { id: userId } } = await User.findOne({ where: { email } });
-  const { userId: postUserId } = await BlogPost.findOne({ where: { id } });
+  const validUser = await checkUser(email, id);
 
-  if (userId !== postUserId) throw ERROR_401;
+  if (!validUser) throw ERROR_401;
 
   const removed = await BlogPost.destroy({ where: { id } });
   return removed;

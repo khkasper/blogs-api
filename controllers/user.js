@@ -1,5 +1,5 @@
 const rescue = require('express-rescue');
-const { CREATED, OK } = require('../utils/statusCodes');
+const { CREATED, OK, NO_CONTENT } = require('../utils/statusCodes');
 const UserService = require('../services/user');
 
 const create = rescue(async (req, res) => {
@@ -19,8 +19,15 @@ const getById = rescue(async (req, res) => {
   return res.status(OK).json(user);
 });
 
+const remove = rescue(async (req, res) => {
+  const { userEmail } = req;
+  await UserService.remove(userEmail);
+  return res.status(NO_CONTENT).end();
+});
+
 module.exports = {
   create,
   getAll,
   getById,
+  remove,
 };

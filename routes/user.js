@@ -9,6 +9,7 @@ const router = express.Router();
 router
   .get('/', authValidation, UserController.getAll)
   .get('/:id', authValidation, UserController.getById)
-  .post('/', validate(user), UserController.create);
+  .post('/', validate(user), UserController.create)
+  .delete('/me', authValidation, UserController.remove);
 
 module.exports = router;

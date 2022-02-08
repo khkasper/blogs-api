@@ -29,8 +29,11 @@ const getById = async (id) => {
   return user;
 };
 
+const remove = async (email) => User.destroy({ where: { email } });
+
 module.exports = {
   create,
   getAll,
   getById,
+  remove,
 };
