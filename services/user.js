@@ -1,4 +1,3 @@
-const argon = require('argon2');
 const generateToken = require('../utils/generateToken');
 const { User } = require('../models');
 const { CONFLICT, NOT_FOUND } = require('../utils/statusCodes');
@@ -11,8 +10,7 @@ const create = async ({ displayName, email, password, image }) => {
 
   if (user) throw ERROR_409;
 
-  const digest = await argon.hash(password, { type: argon.argon2id });
-  await User.create({ displayName, email, password: digest, image });
+  await User.create({ displayName, email, password, image });
   const token = generateToken({ email });
   return token;
 };

@@ -1,4 +1,3 @@
-const argon2 = require('argon2');
 const generateToken = require('../utils/generateToken');
 const { User } = require('../models');
 const { BAD_REQUEST, UNAUTHORIZED } = require('../utils/statusCodes');
@@ -11,10 +10,10 @@ const login = async ({ email, password }) => {
 
   if (!user) throw ERROR_400;
 
-  const verified = await argon2.verify(user.password, password, { type: argon2.argon2id });
+  const { password: userPassword } = user;
   let token;
 
-  if (verified) {
+  if (password === userPassword) {
     token = generateToken({ email });
   } else throw ERROR_401;
 
