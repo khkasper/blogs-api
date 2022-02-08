@@ -3,8 +3,8 @@ const { OK } = require('../utils/statusCodes');
 const LoginService = require('../services/login');
 
 const login = rescue(async (req, res) => {
-  const { email } = req.body;
-  const token = await LoginService.login({ email });
+  const { email, password } = req.body;
+  const token = await LoginService.login({ email, password });
   return res.status(OK).json({ token });
 });
 

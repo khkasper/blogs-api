@@ -1,3 +1,4 @@
+const argon = require('argon2');
 const generateToken = require('../utils/generateToken');
 const { User } = require('../models');
 const { CONFLICT, NOT_FOUND } = require('../utils/statusCodes');
@@ -5,13 +6,13 @@ const { CONFLICT, NOT_FOUND } = require('../utils/statusCodes');
 const ERROR_404 = { code: NOT_FOUND, message: 'User does not exist' };
 const ERROR_409 = { code: CONFLICT, message: 'User already registered' };
 
-const create = async (userData) => {
-  const { email } = userData;
-  const existingUser = await User.findOne({ where: { email } });
+const create = async ({ displayName, email, password, image }) => {
+  const user = await User.findOne({ where: { email } });
 
-  if (existingUser) throw ERROR_409;
+  if (user) throw ERROR_409;
 
-  await User.create(userData);
+  const digest = await argon.hash(password, { type: argon.argon2id });
+  await User.create({ displayName, email, password: digest, image });
   const token = generateToken({ email });
   return token;
 };
